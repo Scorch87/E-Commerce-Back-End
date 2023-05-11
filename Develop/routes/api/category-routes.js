@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   try{
     const categoryData = await Category.findAll(
       // be sure to include its associated Products
-      include [{model: Product, as: 'category_products'}]
+      { include: Product}
     );
 
     res.status(200).json(categoryData);
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
   try{
     const categoryData = await Category.findByPk(req.params.id, {
       // be sure to include its associated Products
-      include: [{model: Product, as: 'category_products'}]
+      include: {model: Product}
     });
     if(!categoryData) {
       res.status(404).json({message:'No category found with this id!'})
@@ -74,10 +74,10 @@ router.delete('/:id', async (req, res) => {
       where: { id: req.params.id }
     });
     if(!categoryData){
-      res.status(404).json({message: 'No trip with this id! '});
+      res.status(404).json({message: 'No category with this id! '});
       return;
     }
-    res.status(200).json(categoryData);
+    res.status(200).json({ message: 'Category deleted successfully.' }); // send deletion message too?
 
   } catch (err) {
     res.status(500).json(err);
